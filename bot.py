@@ -83,6 +83,7 @@ async def handle_series(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif data == "remove":
         if series_name:
             delete_series(series_name, update.effective_user.id)
+            context.user_data.pop("current_series")
             await query.edit_message_text(f"Series '{series_name}' removed.", )
         else:
             await query.edit_message_text("No series selected.")
@@ -106,7 +107,7 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         series_name = data.split("_", 1)[1]
         context.user_data["current_series"] = series_name
         await handle_series(update, context)
-    elif data in ("menu", "increase", "cancel", "remove", "apply") or data.startswith("graph_"):
+    elif data in ("menu", "increase", "cancel", "remove", "apply", "create") or data.startswith("graph_"):
         await menu(update, context)
     else:
         raise RuntimeError(f"Unsupported data: {data}")
@@ -126,7 +127,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.user_data["awaiting_series_name"] = False
         await update.message.reply_text(f"Series '{series_name}' created!")
         context.user_data["current_series"] = series_name
-        await handle_series(update, context)
+        await menu(update, context)
 
 
 async def graph_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
