@@ -81,12 +81,9 @@ async def handle_series(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.edit_message_text(f"Selected series: {series_name}. Changes canceled.",
                                       reply_markup=series_reply_markup)
     elif data == "remove":
-        if series_name:
-            delete_series(series_name, update.effective_user.id)
-            context.user_data.pop("current_series")
-            await query.edit_message_text(f"Series '{series_name}' removed.", )
-        else:
-            await query.edit_message_text("No series selected.")
+        delete_series(series_name, update.effective_user.id)
+        context.user_data.pop("current_series")
+        await query.edit_message_text(f"Series '{series_name}' removed. /menu", )
     elif data == "menu":
         context.user_data.pop("current_series")
         await handle_menu(update, context)
