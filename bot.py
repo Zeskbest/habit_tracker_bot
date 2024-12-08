@@ -126,7 +126,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.user_data["awaiting_series_name"] = False
         await update.message.reply_text(f"Series '{series_name}' created!")
         context.user_data["current_series"] = series_name
-        await menu(update, context)
+        await handle_series(update, context)
 
 
 async def graph_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
